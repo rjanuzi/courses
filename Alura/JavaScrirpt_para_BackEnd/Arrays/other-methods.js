@@ -56,3 +56,10 @@ const sampleArray = [1, 10, 4];
 // But the const array can be modified
 sampleArray.push(100);
 console.log(sampleArray);
+
+// Concat without and array
+const arrayOriginal = ["Maria", "Carlos", "Eduardo", "Samanta"]
+const arrayConcat = arrayOriginal.concat("André", "Fernanda")
+
+console.log(arrayOriginal)
+console.log(arrayConcat)
