@@ -1,11 +1,45 @@
-import chalk from "chalk";
+import fs from "fs"; // Native Node.js module
+import chalk from "chalk"; // Third-party module
 
-console.log(chalk.blue("Hello world!"));
+function digestReadError(err) {
+  throw new Error(chalk.red(err.code, "File not finded"));
+}
 
-console.log(
-  "São geralmente recuperados a partir de um objeto [FileList](https://developer.mozilla.org/pt-BR/docs/Web/API/FileList) que é retornado como resultado da seleção, pelo usuário, de arquivos através do elemento [<input>](https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/Input), a partir do objeto [DataTransfer](https://developer.mozilla.org/pt-BR/docs/Web/API/DataTransfer) utilizado em operações de arrastar e soltar, ou a partir da API `mozGetAsFile"
-);
-console.log(
-  "()` em um [HTMLCanvasElement](https://developer.mozilla.org/pt-BR/docs/Web/API/HTMLCanvasElement). Em Gecko, códigos com privilégiios podem criar objetos File representando qualquer arquivo local sem a intereção do usuário (veja [Implementation notes](https://developer.mozilla.org/pt-BR/docs/Web/API/File#implementation_notes) para mais informações.)."
+// Sync version
+// function readFile(path) {
+//   return fs.readFile(path, { encoding: "utf-8", flag: "r" }, (err, data) => {
+//     if (err) {
+//       digestReadError(err);
+//     } else {
+//       console.log(chalk.green(data));
+//     }
+//   });
+// }
 
-);
+// Promisses with then/catch
+// function readFile(path) {
+//   fs.promises
+//     .readFile(path, { encoding: "utf-8", flag: "r" })
+//     .then((data) => {
+//       console.log(chalk.green(data));
+//     })
+//     .catch(digestReadError);
+// }
+
+// Async/Await - Same result as promisse, but more readable
+async function readFile(path) {
+  try {
+    const data = await fs.promises.readFile(path, {
+      encoding: "utf-8",
+      flag: "r",
+    });
+    console.log(chalk.greenBright(data));
+  } catch (err) {
+    digestReadError(err);
+  } finally {
+    console.log(chalk.blue("Done!"));
+  }
+}
+
+await readFile("files/text.md");
+await readFile("files/texxt.md"); // Error
