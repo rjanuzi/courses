@@ -37,7 +37,7 @@ async function extractLinks(path) {
     });
     let links = [...data.matchAll(linksRegex)]; // Spread the result and create the array
     let result = links.map((l) => ({ name: l[1], url: l[2] })); // We are interested only in the first and second groups
-    console.log(result);
+    return result.length > 0 ? result : null;
   } catch (err) {
     digestReadError(err);
   } finally {
@@ -45,4 +45,4 @@ async function extractLinks(path) {
   }
 }
 
-await extractLinks("files/text.md");
+export default extractLinks;
