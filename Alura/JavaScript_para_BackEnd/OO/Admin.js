@@ -8,6 +8,11 @@ export default class Admin extends User {
   createCourse(courseName) {
     console.log(`Creating course ${courseName}...`);
   }
+
+  // Override showInfor method (Polymorphism)
+  showInfo() {
+    return `Name (Admin): ${this.name}, Email: ${this.email}, Birthdate: ${this.birthdate}, Role: ${this.role}, Active: ${this.active}`;
+  }
 }
 
 // let user = new User("John", "john@gmail.com", "01/01/1990");
