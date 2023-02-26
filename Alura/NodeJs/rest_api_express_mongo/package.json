@@ -1,8 +1,8 @@
 {
-  "name": "rest_api_express_mongo",
+  "name": "alura_rest_api_express_mongo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,6 +19,7 @@
     "url": "git+https://github.com/rjanuzi/courses"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongoose": "^6.10.0"
   }
 }

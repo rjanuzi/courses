@@ -1,19 +1,17 @@
 import express from "express";
+import db from "./gateways/db.js";
+import books from "./models/Book.js";
+
+/* Direct error and connection message to console */
+db.on("error", console.error.bind(console, "DB Connection Error:"));
+db.once("open", () => {
+  console.log("DB Connected!");
+});
 
 const app = express();
 
 /* Configure express to receive JSON data from POSTs */
 app.use(express.json());
-
-const books = [
-  { id: 1, title: "Lord of the Rings", author: "J.R.R. Tolkien" },
-  {
-    id: 2,
-    title: "Harry Potter and the Philosopher's Stone",
-    author: "J.K. Rowling",
-  },
-];
-let lastId = books.length;
 
 function findBook(id) {
   return books.find((book) => book.id === Number(id));
@@ -30,7 +28,13 @@ app.get("/", (req, res) => {
 
 /* Books GET */
 app.get("/books", (req, res) => {
-  res.status(200).json(books);
+  books.find((err, booksRetrivied) => {
+    if (err) {
+      res.status(500).send("Error while getting books");
+    } else {
+      res.status(200).json(booksRetrivied);
+    }
+  });
 });
 
 app.get("/books/:id", (req, res) => {
