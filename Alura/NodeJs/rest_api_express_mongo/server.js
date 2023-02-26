@@ -1,20 +1,7 @@
-const http = require("http");
+import app from "./src/app.js";
 
-const PORT = 80;
+const PORT = process.env.PORT || 80;
 
-const routes = {
-  "/": "Hello World!",
-  "/books": "Books page",
-  "/authors": "Authors page",
-  "/publisher": "Publisher page",
-  "/about": "About page",
-};
-
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end(routes[req.url]);
-});
-
-server.listen(PORT, () => {
-  console.log(`Server listening on port http://localhost:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
