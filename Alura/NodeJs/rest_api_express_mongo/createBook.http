@@ -3,5 +3,7 @@ Content-Type: application/json
 
 {
     "title": "The Hitchhiker's Guide to the Galaxy",
-    "author": "Douglas Adams"
+    "author": "Douglas Adams",
+    "publisher": "Pan Books",
+    "pages": 224
 }
