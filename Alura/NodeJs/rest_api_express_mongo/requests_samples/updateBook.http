@@ -1,9 +1,9 @@
-POST http://localhost:80/books HTTP/1.1
+PUT http://localhost:80/books/6404864fef621117ac2cd555 HTTP/1.1
 Content-Type: application/json
 
 {
     "title": "The Hitchhiker's Guide to the Galaxy",
-    "author": "Douglas Adams",
+    "author": "640720b88b1fc552d84cf3b8",
     "publisher": "Pan Books",
     "pages": 224
 }

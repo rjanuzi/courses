@@ -2,24 +2,41 @@ import books from "../models/Book.js";
 
 class BookController {
   static listBooks = (req, res) => {
-    books.find((err, booksRetrivied) => {
-      if (err) {
-        res.status(500).send("Error while getting books");
-      } else {
-        res.status(200).json(booksRetrivied);
-      }
-    });
+    /* Find all books and bring the String ID for Author */
+    // books.find((err, booksRetrivied) => {
+    //   if (err) {
+    //     res.status(500).send("Error while getting books");
+    //   } else {
+    //     res.status(200).json(booksRetrivied);
+    //   }
+    // });
+
+    /* Find all books and populate with the correspondent author's name */
+    books
+      .find()
+      .populate("author", "name") /* Populate only the "name" field */
+      .populate("publisher", "name")
+      .exec((err, booksRetrivied) => {
+        if (err) {
+          res.status(500).send(`${err.message} - Error while getting books`);
+        } else {
+          res.status(200).json(booksRetrivied);
+        }
+      });
   };
 
   static getBook = (req, res) => {
     const idToFind = req.params.id;
-    books.findById(idToFind, (err, bookRetrivied) => {
-      if (err) {
-        res.status(400).send(`${err.message} - Book not found`);
-      } else {
-        res.status(200).json(bookRetrivied);
-      }
-    });
+    books
+      .findById(idToFind)
+      .populate("author") /* Populate all fields */
+      .exec((err, bookRetrivied) => {
+        if (err) {
+          res.status(400).send(`${err.message} - Book not found`);
+        } else {
+          res.status(200).json(bookRetrivied);
+        }
+      });
   };
 
   static createBook = (req, res) => {
