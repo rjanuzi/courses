@@ -78,6 +78,18 @@ class BookController {
       }
     });
   };
+
+  static listBooksByAuthor = (req, res) => {
+    const authorId = req.query.author;
+
+    books.find({ author: authorId }, (err, booksRetrivied) => {
+      if (err) {
+        res.status(500).send(`${err.message} - Error while getting books`);
+      } else {
+        res.status(200).json(booksRetrivied);
+      }
+    });
+  };
 }
 
 export default BookController;
