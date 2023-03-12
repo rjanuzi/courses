@@ -1,0 +1,2 @@
+GET http://localhost/people/byName?name=Cardoso+Januzi HTTP/1.1
+Content-Type: application/json
