@@ -9,7 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      People.hasMany(models.Classes, {
+        foreignKey: "teacher_id",
+      }); /* This is how set manully the FK column name */
+      People.hasMany(models.Subscriptions, {
+        foreighKey: "person_id",
+      }); /* Will create the person_id in the Classes database. */
     }
   }
   Person.init(
