@@ -1,7 +1,7 @@
-POST http://localhost/people/3/subscriptions HTTP/1.1
+POST http://localhost/people/2/subscriptions HTTP/1.1
 Content-Type: application/json
 
 {
     "class_id": 2,
-    "status": "Inactive"
+    "status": "Active"
 }

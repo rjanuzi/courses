@@ -1,0 +1,1 @@
+DELETE http://localhost/people/3/subscriptions/5 HTTP/1.1

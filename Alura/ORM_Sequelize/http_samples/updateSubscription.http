@@ -1,0 +1,7 @@
+PUT http://localhost/people/3/subscriptions/5 HTTP/1.1
+Content-Type: application/json
+
+{
+    "class_id": 1,
+    "status": "Active"
+}

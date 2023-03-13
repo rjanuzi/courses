@@ -20,5 +20,13 @@ router.post(
   "/people/:studentId/subscriptions",
   PeopleController.createSubcription
 );
+router.put(
+  "/people/:studentId/subscriptions/:subscriptionId",
+  PeopleController.updateSubscription
+);
+router.delete(
+  "/people/:studentId/subscriptions/:subscriptionId",
+  PeopleController.deleteSubscription
+);
 
 module.exports = router;

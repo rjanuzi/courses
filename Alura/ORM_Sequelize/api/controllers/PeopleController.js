@@ -120,6 +120,47 @@ class PeopleController {
       });
     }
   }
+
+  static async updateSubscription(req, res) {
+    try {
+      const { studentId, subscriptionId } = req.params;
+      const subscriptionNewData = req.body;
+
+      await db.Subscription.update(subscriptionNewData, {
+        where: {
+          id: Number(subscriptionId),
+          student_id: Number(studentId),
+        },
+      });
+
+      res.status(201).json(`Subscription with id ${subscriptionId} updated.`);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while updating subscription. - ${err.message}`,
+      });
+    }
+  }
+
+  static async deleteSubscription(req, res) {
+    try {
+      const { studentId, subscriptionId } = req.params;
+
+      console.log(studentId, subscriptionId);
+
+      await db.Subscription.destroy({
+        where: {
+          id: Number(subscriptionId),
+          student_id: Number(studentId),
+        },
+      });
+
+      res.status(201).json(`Subscription with id ${subscriptionId} deleted.`);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while deleting subscription. - ${err.message}`,
+      });
+    }
+  }
 }
 
 module.exports = PeopleController;
