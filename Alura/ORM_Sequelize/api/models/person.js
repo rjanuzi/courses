@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Person.hasMany(models.Class, {
         foreignKey: "teacher_id",
-      }); /* This is how set manully the FK column name */
+      });
       Person.hasMany(models.Subscription, {
-        foreighKey: "person_id",
-      }); /* Will create the person_id in the Classes database. */
+        foreignKey: "student_id",
+      });
     }
   }
   Person.init(

@@ -81,6 +81,45 @@ class PeopleController {
       });
     }
   }
+
+  static async getOneSubscription(req, res) {
+    try {
+      /* Params  = people/:studentId/subscriptions/:subscriptionId*/
+      const { studentId, subscriptionId } = req.params;
+      console.log(studentId, subscriptionId);
+      const subscription = await db.Subscription.findOne({
+        where: {
+          id: Number(subscriptionId),
+          student_id: Number(studentId),
+        },
+      });
+
+      return res.status(200).json(subscription);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while retrieving subscription. - ${err.message}`,
+      });
+    }
+  }
+
+  static async createSubcription(req, res) {
+    try {
+      const { studentId } = req.params;
+
+      /* Create a new obj with the subscription data adding the studentId data */
+      const newSubscriptionData = {
+        ...req.body,
+        student_id: Number(studentId),
+      };
+
+      const newSubscription = await db.Subscription.create(newSubscriptionData);
+      return res.status(501).json(newSubscription);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while creating subscription. - ${err.message}`,
+      });
+    }
+  }
 }
 
 module.exports = PeopleController;

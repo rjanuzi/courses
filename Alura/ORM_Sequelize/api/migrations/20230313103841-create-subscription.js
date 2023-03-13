@@ -12,7 +12,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
       },
-      person_id: {
+      student_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { model: "People", key: "id" },
