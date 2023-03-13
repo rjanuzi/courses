@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      People.hasMany(models.Classes, {
+      Person.hasMany(models.Class, {
         foreignKey: "teacher_id",
       }); /* This is how set manully the FK column name */
-      People.hasMany(models.Subscriptions, {
+      Person.hasMany(models.Subscription, {
         foreighKey: "person_id",
       }); /* Will create the person_id in the Classes database. */
     }

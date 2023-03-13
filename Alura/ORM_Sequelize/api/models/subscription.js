@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Subscriptions.belongsTo(models.People, { foreignKey: "person_id" });
-      Subscriptions.belongsTo(models.Classes);
+      Subscription.belongsTo(models.Person, { foreignKey: "person_id" });
+      Subscription.belongsTo(models.Class);
     }
   }
   Subscription.init(
