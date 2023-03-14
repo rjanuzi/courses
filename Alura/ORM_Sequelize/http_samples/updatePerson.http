@@ -1,9 +1,6 @@
-PUT http://localhost/people/13 HTTP/1.1
+PUT http://localhost/people/4 HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Ada Lovelace",
-    "active": true,
-    "email": "al@email.com",
-    "role": "student"
+    "active": true
 }

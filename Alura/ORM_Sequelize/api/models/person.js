@@ -28,6 +28,22 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Person",
       paranoid: true,
+
+      /* 
+        The defaultScope defines that all queries uses the "WHERE active = TRUE" clause by default.
+        IMPORTANT: This affects also the UPDATE statement.
+      */
+      defaultScope: {
+        where: {
+          active: true,
+        },
+      },
+
+      /* We also can define custom scopes for use in the code. */
+      scopes: {
+        all: { where: {} },
+        /* Others */
+      },
     }
   );
   return Person;

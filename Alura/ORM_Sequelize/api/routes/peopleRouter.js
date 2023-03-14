@@ -4,7 +4,8 @@ const PeopleController = require("../controllers/PeopleController");
 const router = Router();
 
 /* People routes */
-router.get("/people", PeopleController.getAllPeople);
+router.get("/people", PeopleController.getActivePeople);
+router.get("/people/all", PeopleController.getAllPeople);
 router.get("/people/byName", PeopleController.getPeopleByName);
 router.get("/people/:id", PeopleController.getPersonById);
 router.post("/people", PeopleController.createPerson);

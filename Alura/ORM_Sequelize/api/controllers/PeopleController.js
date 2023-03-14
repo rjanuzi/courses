@@ -4,11 +4,26 @@ const { Op } = require("sequelize");
 class PeopleController {
   static async getAllPeople(req, res) {
     try {
-      const persons = await db.Person.findAll();
-      return res.status(200).json(persons);
+      /* Using custom scope from the Person model to not apply the active filter (defaulScope) */
+      const people = await db.Person.scope("all").findAll();
+      return res.status(200).json(people);
     } catch (err) {
       res.status(500).send({
-        message: `Some error occurred while retrieving persons. - ${err.message}`,
+        message: `Some error occurred while retrieving people. - ${err.message}`,
+      });
+    }
+  }
+
+  static async getActivePeople(req, res) {
+    try {
+      /* The default scope defined in the Person model, will ignore 
+      inactive persons. */
+      const people = await db.Person.findAll();
+
+      return res.status(200).json(people);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error while retrieving active people. - ${err.message}`,
       });
     }
   }
@@ -41,7 +56,7 @@ class PeopleController {
       const personNewData = req.body;
       const personId = req.params.id;
 
-      await db.Person.update(personNewData, {
+      await db.Person.scope("all").update(personNewData, {
         where: { id: personId },
       });
 
@@ -57,7 +72,7 @@ class PeopleController {
     try {
       const personId = req.params.id;
 
-      await db.Person.destroy({
+      await db.Person.scope("all").destroy({
         where: { id: personId },
       });
 
@@ -73,7 +88,7 @@ class PeopleController {
     try {
       const personId = req.params.id;
 
-      await db.Person.restore({
+      await db.Person.scope("all").restore({
         where: { id: personId },
       });
 
@@ -87,7 +102,7 @@ class PeopleController {
 
   static async getPeopleByName(req, res) {
     try {
-      const person = await db.Person.findAll({
+      const person = await db.Person.scope("all").findAll({
         where: { name: { [Op.like]: `%${req.query.name}%` } },
       });
       return res.status(200).json(person);
