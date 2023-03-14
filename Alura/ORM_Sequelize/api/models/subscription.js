@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Subscription",
+      paranoid: true,
     }
   );
   return Subscription;
