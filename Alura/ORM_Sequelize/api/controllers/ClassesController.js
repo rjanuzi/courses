@@ -68,6 +68,22 @@ class ClassesController {
       });
     }
   }
+
+  static async restoreClass(req, res) {
+    try {
+      const classId = req.params.id;
+
+      await db.Class.restore({
+        where: { id: classId },
+      });
+
+      res.status(201).json(`Class with id ${classId} restored.`);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while restoring class. - ${err.message}`,
+      });
+    }
+  }
 }
 
 module.exports = ClassesController;

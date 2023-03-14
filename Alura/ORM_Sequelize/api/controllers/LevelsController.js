@@ -68,6 +68,24 @@ class LevelsController {
       });
     }
   }
+
+  static async restoreLevel(req, res) {
+    try {
+      const levelId = req.params.id;
+
+      await db.Level.restore({
+        where: { id: levelId },
+      });
+
+      res.status(201).json({
+        message: `Level with id ${levelId} restored.`,
+      });
+    } catch (err) {
+      res.status(500).json({
+        message: `Some error occurred while restoring level. - ${err.message}`,
+      });
+    }
+  }
 }
 
 module.exports = LevelsController;

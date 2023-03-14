@@ -10,6 +10,7 @@ router.get("/people/:id", PeopleController.getPersonById);
 router.post("/people", PeopleController.createPerson);
 router.put("/people/:id", PeopleController.updatePerson);
 router.delete("/people/:id", PeopleController.deletePerson);
+router.post("/people/restore/:id", PeopleController.restorePerson);
 
 /* Subscriptions Routes */
 router.get(
@@ -27,6 +28,10 @@ router.put(
 router.delete(
   "/people/:studentId/subscriptions/:subscriptionId",
   PeopleController.deleteSubscription
+);
+router.post(
+  "/people/subscriptions/restore/:id",
+  PeopleController.restoreSubscription
 );
 
 module.exports = router;

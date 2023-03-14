@@ -69,6 +69,22 @@ class PeopleController {
     }
   }
 
+  static async restorePerson(req, res) {
+    try {
+      const personId = req.params.id;
+
+      await db.Person.restore({
+        where: { id: personId },
+      });
+
+      res.status(201).json(`Person with id ${personId} restored.`);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while restoring person. - ${err.message}`,
+      });
+    }
+  }
+
   static async getPeopleByName(req, res) {
     try {
       const person = await db.Person.findAll({
@@ -158,6 +174,24 @@ class PeopleController {
     } catch (err) {
       res.status(500).send({
         message: `Some error occurred while deleting subscription. - ${err.message}`,
+      });
+    }
+  }
+
+  static async restoreSubscription(req, res) {
+    try {
+      const subscriptionId = req.params.id;
+
+      await db.Subscription.restore({
+        where: { id: subscriptionId },
+      });
+
+      res
+        .status(201)
+        .json({ message: `Subscription with id ${subscriptionId} restored.` });
+    } catch (err) {
+      res.status(500).json({
+        message: `Some error occurred while restoring subscription. - ${err.message}`,
       });
     }
   }

@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Class",
-      paranoid: true,
+      paranoid: true /* This change the destroy behavior to use a new columns deletedAt */,
     }
   );
   return Class;
