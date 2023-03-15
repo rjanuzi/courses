@@ -2,13 +2,23 @@ const db = require("../models"); /* By default get the index.js */
 const { Op } = require("sequelize");
 
 class ClassesController {
-  static async getAllClasses(req, res) {
+  static async getClasses(req, res) {
     try {
-      const classes = await db.Class.findAll();
+      const { startDate, endDate } = req.query;
+      const where = {};
+
+      if (startDate || endDate) {
+        where.start_date = {};
+        startDate ? (where.start_date[Op.gte] = startDate) : null;
+        endDate ? (where.start_date[Op.lte] = endDate) : null;
+      }
+
+      const classes = await db.Class.findAll({ where: where });
+
       return res.status(200).json(classes);
     } catch (err) {
-      res.status(500).send({
-        message: `Some error occurred while retrieving classes. - ${err.message}`,
+      res.status(500).json({
+        message: `Error while getting classes by date. - ${err.message}`,
       });
     }
   }
