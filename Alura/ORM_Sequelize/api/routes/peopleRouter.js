@@ -14,6 +14,7 @@ router.delete("/people/:id", PeopleController.deletePerson);
 router.post("/people/restore/:id", PeopleController.restorePerson);
 
 /* Subscriptions Routes */
+router.get("/people/subscriptions/:studentId", PeopleController.getSubscriptions);
 router.get(
   "/people/:studentId/subscriptions/:subscriptionId",
   PeopleController.getOneSubscription

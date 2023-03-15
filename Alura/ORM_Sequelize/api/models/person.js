@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       });
       Person.hasMany(models.Subscription, {
         foreignKey: "student_id",
+        scope: {
+          status: "Active" /* Only Active status */,
+        },
       });
     }
   }

@@ -176,8 +176,6 @@ class PeopleController {
     try {
       const { studentId, subscriptionId } = req.params;
 
-      console.log(studentId, subscriptionId);
-
       await db.Subscription.destroy({
         where: {
           id: Number(subscriptionId),
@@ -207,6 +205,36 @@ class PeopleController {
     } catch (err) {
       res.status(500).json({
         message: `Some error occurred while restoring subscription. - ${err.message}`,
+      });
+    }
+  }
+
+  static async getSubscriptions(req, res) {
+    try {
+      const { studentId } = req.params;
+
+      /* WHERE-based way */
+      // const subscriptions = await db.Subscription.findAll({
+      //   where: {
+      //     student_id: Number(studentId),
+      //   },
+      // });
+
+      const student = await db.Person.findOne({
+        where: {
+          id: Number(studentId),
+        },
+      });
+
+      /* "Mixin" - getSubscriptions is a auto-generate method based
+      on the scope defined at the person model for the relationship between
+      person and subscription */
+      const subscriptions = await student.getSubscriptions();
+
+      res.status(201).json(subscriptions);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while getting student subscriptions. - ${err.message}`,
       });
     }
   }
