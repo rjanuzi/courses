@@ -1,5 +1,5 @@
 const db = require("../models"); /* By default get the index.js */
-const { Op } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 class PeopleController {
   static async getAllPeople(req, res) {
@@ -103,7 +103,7 @@ class PeopleController {
   static async getPeopleByName(req, res) {
     try {
       const person = await db.Person.scope("all").findAll({
-        where: { name: { [Op.like]: `%${req.query.name}%` } },
+        where: { name: { [Sequelize.Op.like]: `%${req.query.name}%` } },
       });
       return res.status(200).json(person);
     } catch (err) {
@@ -231,7 +231,53 @@ class PeopleController {
       person and subscription */
       const subscriptions = await student.getSubscriptions();
 
-      res.status(201).json(subscriptions);
+      return res.status(201).json(subscriptions);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while getting student subscriptions. - ${err.message}`,
+      });
+    }
+  }
+
+  static async getSubscriptionsByClass(req, res) {
+    try {
+      const { classId } = req.params;
+
+      const subscriptions = await db.Subscription.findAndCountAll({
+        where: {
+          class_id: Number(classId),
+          status: "Active",
+        },
+        limit: 20,
+        order: [["student_id", "ASC"]],
+      });
+
+      return res.status(201).json(subscriptions);
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while getting student subscriptions. - ${err.message}`,
+      });
+    }
+  }
+
+  static async getFullClasses(req, res) {
+    try {
+      const { classLimit } = req.params;
+
+      const subscriptions = await db.Subscription.findAndCountAll({
+        where: {
+          status: "Active",
+        },
+        attributes: ["class_id"],
+        group: "class_id",
+
+        /* Here we need to use the SQL language, since Sequelize don't
+           have a ready function to do what we need.
+           */
+        having: Sequelize.literal(`COUNT(class_id) >= ${classLimit}`),
+      });
+
+      return res.status(201).json(subscriptions);
     } catch (err) {
       res.status(500).send({
         message: `Some error occurred while getting student subscriptions. - ${err.message}`,
