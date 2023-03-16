@@ -10,8 +10,12 @@ router.get("/people/byName", PeopleController.getPeopleByName);
 router.get("/people/:id", PeopleController.getPersonById);
 router.post("/people", PeopleController.createPerson);
 router.put("/people/:id", PeopleController.updatePerson);
-router.delete("/people/:id", PeopleController.deletePerson);
 router.post("/people/restore/:id", PeopleController.restorePerson);
+router.post(
+  "/people/inactivateStudent/:sudentId",
+  PeopleController.inactivateStudent
+);
+router.delete("/people/:id", PeopleController.deletePerson);
 
 /* Subscriptions Routes */
 router.get(

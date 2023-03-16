@@ -68,6 +68,42 @@ class PeopleController {
     }
   }
 
+  static async inactivateStudent(req, res) {
+    try {
+      const studentId = req.params.sudentId;
+
+      /* To ensure that all the operation are done or any is done, we can use 
+      transaction. If both updates are executed completely it finishes normally,
+      otherwise we roll-back the first one. */
+      db.sequelize.transaction(async (updateTransaction) => {
+        await db.Person.scope("all").update(
+          { active: false },
+          {
+            where: { id: Number(studentId) },
+          },
+          { transaction: updateTransaction }
+        );
+
+        /* When inactivating a student, all the related subscriptions also shall be inactivated. */
+        await db.Subscription.update(
+          { status: "Inactive" },
+          {
+            where: {
+              student_id: Number(studentId),
+            },
+          },
+          { transaction: updateTransaction }
+        );
+
+        res.status(201).json(`Student with id ${studentId} inactivated.`);
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: `Some error occurred while updating person. - ${err.message}`,
+      });
+    }
+  }
+
   static async deletePerson(req, res) {
     try {
       const personId = req.params.id;
