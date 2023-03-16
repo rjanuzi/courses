@@ -1,10 +1,14 @@
 const db = require("../models"); /* By default get the index.js */
 const { Op } = require("sequelize");
 
+const Services = require("../services/Services");
+
+const levelsServices = new Services("Level");
+
 class LevelsController {
   static async getAllLevels(req, res) {
     try {
-      const levels = await db.Level.findAll();
+      const levels = await levelsServices.getAll();
       return res.status(200).json(levels);
     } catch (err) {
       res.status(500).send({

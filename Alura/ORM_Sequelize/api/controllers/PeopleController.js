@@ -1,11 +1,16 @@
-const db = require("../models"); /* By default get the index.js */
 const { Sequelize } = require("sequelize");
+const db = require("../models");
+const { PeopleServices } = require("../services");
+const { SubscriptionsServices } = require("../services");
+
+const peopleServices = new PeopleServices();
+const subscriptionsServices = new SubscriptionsServices();
 
 class PeopleController {
   static async getAllPeople(req, res) {
     try {
-      /* Using custom scope from the Person model to not apply the active filter (defaulScope) */
-      const people = await db.Person.scope("all").findAll();
+      const people = await peopleServices.getAllPersons();
+
       return res.status(200).json(people);
     } catch (err) {
       res.status(500).send({
@@ -16,9 +21,7 @@ class PeopleController {
 
   static async getActivePeople(req, res) {
     try {
-      /* The default scope defined in the Person model, will ignore 
-      inactive persons. */
-      const people = await db.Person.findAll();
+      const people = await peopleServices.getActivePersons();
 
       return res.status(200).json(people);
     } catch (err) {
@@ -30,7 +33,7 @@ class PeopleController {
 
   static async getPersonById(req, res) {
     try {
-      const person = await db.Person.findByPk(req.params.id);
+      const person = await peopleServices.getOne(req.params.id);
       return res.status(200).json(person);
     } catch (err) {
       res.status(500).send({
@@ -42,7 +45,7 @@ class PeopleController {
   static async createPerson(req, res) {
     try {
       const personData = req.body;
-      const person = await db.Person.create(personData);
+      const person = await peopleServices.createOne(personData);
       return res.status(201).json(person);
     } catch (err) {
       res.status(500).send({
@@ -56,9 +59,7 @@ class PeopleController {
       const personNewData = req.body;
       const personId = req.params.id;
 
-      await db.Person.scope("all").update(personNewData, {
-        where: { id: personId },
-      });
+      await peopleServices.updateOne(personNewData, personId);
 
       res.status(201).json(`Person with id ${personId} updated.`);
     } catch (err) {
@@ -76,23 +77,17 @@ class PeopleController {
       transaction. If both updates are executed completely it finishes normally,
       otherwise we roll-back the first one. */
       db.sequelize.transaction(async (updateTransaction) => {
-        await db.Person.scope("all").update(
+        await peopleServices.updateOne(
           { active: false },
-          {
-            where: { id: Number(studentId) },
-          },
-          { transaction: updateTransaction }
+          Number(studentId),
+          updateTransaction
         );
 
         /* When inactivating a student, all the related subscriptions also shall be inactivated. */
-        await db.Subscription.update(
+        await subscriptionsServices.updateByStudent(
           { status: "Inactive" },
-          {
-            where: {
-              student_id: Number(studentId),
-            },
-          },
-          { transaction: updateTransaction }
+          Number(studentId),
+          updateTransaction
         );
 
         res.status(201).json(`Student with id ${studentId} inactivated.`);
@@ -108,7 +103,7 @@ class PeopleController {
     try {
       const personId = req.params.id;
 
-      await db.Person.scope("all").destroy({
+      await peopleServices.deleteOne({
         where: { id: personId },
       });
 
@@ -124,9 +119,7 @@ class PeopleController {
     try {
       const personId = req.params.id;
 
-      await db.Person.scope("all").restore({
-        where: { id: personId },
-      });
+      await peopleServices.restoreOne(personId);
 
       res.status(201).json(`Person with id ${personId} restored.`);
     } catch (err) {
@@ -138,9 +131,7 @@ class PeopleController {
 
   static async getPeopleByName(req, res) {
     try {
-      const person = await db.Person.scope("all").findAll({
-        where: { name: { [Sequelize.Op.like]: `%${req.query.name}%` } },
-      });
+      const person = await peopleServices.getByName(req.query.name);
       return res.status(200).json(person);
     } catch (err) {
       res.status(500).send({
