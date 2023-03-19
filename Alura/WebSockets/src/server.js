@@ -3,10 +3,17 @@ import url from "url";
 import path from "path";
 import http from "http";
 import { Server } from "socket.io";
+import db from "./gateways/db.js";
 
 const PORT = process.env.port | 80;
 const CURRENT_FOLDER = url.fileURLToPath(import.meta.url);
 const PUBLIC_FOLDER = path.join(CURRENT_FOLDER, "../..", "public");
+
+/* Direct error and connection message to console */
+db.on("error", console.error.bind(console, "DB Connection Error:"));
+db.once("open", () => {
+  console.log("DB Connected!");
+});
 
 const app = express();
 
@@ -22,7 +29,4 @@ httpServer.listen(PORT, () => {
 /* Create the server to wait for WebSockets connections. */
 const io = new Server(httpServer);
 
-/* When the event "connection" occurs, run the desired funtion. */
-io.on("connection", () => {
-  console.log("A new client has connected!");
-});
+export default io;
