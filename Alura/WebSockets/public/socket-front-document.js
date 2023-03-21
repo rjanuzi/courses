@@ -15,8 +15,15 @@ function emitTextFromEditor(data) {
   socket.emit("text_editor_event", data);
 }
 
+function emitDeleteDocument(documentName) {
+  socket.emit("delete-document-event", documentName, (result) => {
+    console.log(result);
+    window.location.href = "/";
+  });
+}
+
 socket.on("text_editor_clients", (text) => {
   updateTextOnEditor(text);
 });
 
-export { selectDocument, emitTextFromEditor };
+export { selectDocument, emitTextFromEditor, emitDeleteDocument };

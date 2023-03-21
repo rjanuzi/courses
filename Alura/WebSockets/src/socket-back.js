@@ -30,6 +30,26 @@ async function updateCurrentState(documentName, newText) {
 }
 
 io.on("connection", (socket) => {
+  socket.on("get-documents", async (returnDocuments) => {
+    const documents = await liveDocuments.find();
+    returnDocuments(documents);
+  });
+
+  socket.on("add-document", async (documentName, callback) => {
+    try {
+      let newDocument = new liveDocuments({ name: documentName, text: "" });
+      let result = await newDocument.save();
+      callback(result.ackowledge);
+    } catch (e) {
+      callback(false);
+    }
+  });
+
+  socket.on("delete-document-event", async (documentName, callback) => {
+    let result = await liveDocuments.deleteOne({ name: documentName });
+    callback(result);
+  });
+
   socket.on("select_document", (documentName, callback) => {
     /* Add the socket to the sockets "room" that share the documentName */
     socket.join(documentName);
@@ -54,6 +74,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", (reason) => {
-    console.log(`Client ${socket.id} disconnect!\nReason: ${reason}`);
+    console.log(`Client ${socket.id} disconnected! (Reason: ${reason})`);
   });
 });
