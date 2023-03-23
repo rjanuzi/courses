@@ -2,9 +2,9 @@ import { alertarERedirecionar, atualizaTextoEditor } from "./documento.js";
 
 const socket = io();
 
-function selecionarDocumento(nome) {
-  socket.emit("selecionar_documento", nome, (texto) => {
-    atualizaTextoEditor(texto);
+function selecionarDocumento(name) {
+  socket.emit("selecionar_documento", name, (text) => {
+    atualizaTextoEditor(text);
   });
 }
 
@@ -12,16 +12,16 @@ function emitirTextoEditor(dados) {
   socket.emit("texto_editor", dados);
 }
 
-socket.on("texto_editor_clientes", (texto) => {
-  atualizaTextoEditor(texto);
+socket.on("texto_editor_clientes", (text) => {
+  atualizaTextoEditor(text);
 });
 
-function emitirExcluirDocumento(nome) {
-  socket.emit("excluir_documento", nome);
+function emitirExcluirDocumento(name) {
+  socket.emit("excluir_documento", name);
 }
 
-socket.on("excluir_documento_sucesso", (nome) => {
-  alertarERedirecionar(nome);
+socket.on("excluir_documento_sucesso", (name) => {
+  alertarERedirecionar(name);
 });
 
 export { emitirTextoEditor, selecionarDocumento, emitirExcluirDocumento };

@@ -4,24 +4,24 @@ const socket = io();
 
 socket.emit("obter_documentos", (documentos) => {
   documentos.forEach((documento) => {
-    inserirLinkDocumento(documento.nome);
+    inserirLinkDocumento(documento.name);
   });
 });
 
-function emitirAdicionarDocumento(nome) {
-  socket.emit("adicionar_documento", nome);
+function emitirAdicionarDocumento(name) {
+  socket.emit("adicionar_documento", name);
 }
 
-socket.on("adicionar_documento_interface", (nome) => {
-  inserirLinkDocumento(nome);
+socket.on("adicionar_documento_interface", (name) => {
+  inserirLinkDocumento(name);
 });
 
-socket.on("documento_existente", (nome) => {
-  alert(`O documento ${nome} já existe!`);
+socket.on("documento_existente", (name) => {
+  alert(`O documento ${name} já existe!`);
 });
 
-socket.on("excluir_documento_sucesso", (nome) => {
-  removerLinkDocumento(nome);
+socket.on("excluir_documento_sucesso", (name) => {
+  removerLinkDocumento(name);
 });
 
 export { emitirAdicionarDocumento };
