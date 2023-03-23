@@ -11,17 +11,18 @@ function getMongoDbUri() {
 
 const cliente = new MongoClient(getMongoDbUri());
 
-let documentosColecao;
+let documentosColecao, usuariosColecao;
 
 try {
   await cliente.connect();
 
   const db = cliente.db(dbConfig.db);
   documentosColecao = db.collection("live_documents");
+  usuariosColecao = db.collection("users");
 
   console.log("Conectado ao banco de dados com sucesso!");
 } catch (erro) {
   console.log(erro);
 }
 
-export { documentosColecao };
+export { documentosColecao, usuariosColecao };

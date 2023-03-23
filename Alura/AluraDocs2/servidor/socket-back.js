@@ -1,8 +1,10 @@
 import io from "./servidor.js";
-import registrarEventosInicio from "./registrarEventos/registrarEventosInicio.js";
-import registrarEventosDocumento from "./registrarEventos/registrarEventosDocumento.js";
+import inicio from "./registrarEventos/inicio.js";
+import documento from "./registrarEventos/documento.js";
+import cadastro from "./registrarEventos/cadastro.js";
 
 io.on("connection", (socket) => {
-  registrarEventosInicio(socket, io);
-  registrarEventosDocumento(socket, io);
+  inicio(socket, io);
+  documento(socket, io);
+  cadastro(socket, io);
 });
