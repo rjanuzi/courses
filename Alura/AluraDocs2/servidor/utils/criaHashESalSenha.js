@@ -10,4 +10,8 @@ function criaHashESalSenha(pass) {
   return { hashSenha, salSenha };
 }
 
-export { criaHashESalSenha };
+function criaTestHash(pass, salSenha) {
+  return scryptSync(pass, salSenha, HASH_SIZE).toString("hex");
+}
+
+export { criaHashESalSenha, criaTestHash };
