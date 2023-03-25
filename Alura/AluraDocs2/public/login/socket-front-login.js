@@ -1,10 +1,12 @@
+import { SESSION_COOKIE, setCookie } from "../utils/cookies.js";
 const socket = io();
 
 function emitAuthUser(user_data) {
   socket.emit("auth_usuario", user_data);
 }
 
-socket.on("auth_sucesso", () => {
+socket.on("auth_sucesso", (tokenJwt) => {
+  setCookie(SESSION_COOKIE, tokenJwt);
   alert("Autenticação realizada com sucesso!");
   window.location.href = "/";
 });
