@@ -4,13 +4,24 @@ import {
   excluirDocumento,
 } from "../db/documentosDb.js";
 
-function registrarEventosDocumento(socket, io) {
-  socket.on("selecionar_documento", async (nomeDocumento, devolverTexto) => {
-    socket.join(nomeDocumento);
+import addConnection from "../utils/connectionsDocs.js";
 
-    const documento = await encontrarDocumento(nomeDocumento);
+function registrarEventosDocumento(socket, io) {
+  socket.on("selecionar_documento", async (inputData, devolverTexto) => {
+    const documento = await encontrarDocumento(inputData.nomeDocumento);
 
     if (documento) {
+      socket.join(inputData.nomeDocumento);
+
+      const usersInDoc = addConnection({
+        docName: inputData.nomeDocumento,
+        userName: inputData.userName,
+      });
+
+      /* Send the updated list to all users in document, including who
+      is entering. */
+      io.to(inputData.nomeDocumento).emit("users_in_doc", usersInDoc);
+
       devolverTexto(documento.text);
     }
   });
