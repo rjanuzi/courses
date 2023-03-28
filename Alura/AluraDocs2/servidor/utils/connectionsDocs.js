@@ -14,4 +14,16 @@ function addConnection({ docName, userName }) {
   return connectionsDocs[docName];
 }
 
-export default addConnection;
+function removeConnection(docName, userName) {
+  let currentUserList = connectionsDocs[docName];
+
+  if (currentUserList) {
+    connectionsDocs[docName] = currentUserList.filter(
+      (user) => user != userName
+    );
+  }
+
+  return connectionsDocs[docName];
+}
+
+export { addConnection, removeConnection };

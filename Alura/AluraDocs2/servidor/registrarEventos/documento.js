@@ -4,7 +4,7 @@ import {
   excluirDocumento,
 } from "../db/documentosDb.js";
 
-import addConnection from "../utils/connectionsDocs.js";
+import { addConnection, removeConnection } from "../utils/connectionsDocs.js";
 
 function registrarEventosDocumento(socket, io) {
   socket.on("selecionar_documento", async (inputData, devolverTexto) => {
@@ -24,22 +24,34 @@ function registrarEventosDocumento(socket, io) {
 
       devolverTexto(documento.text);
     }
-  });
 
-  socket.on("texto_editor", async ({ text, nomeDocumento }) => {
-    const atualizacao = await atualizaDocumento(nomeDocumento, text);
+    /* Listen events only for the sockets that emitted a specific document */
+    socket.on("texto_editor", async ({ text, nomeDocumento }) => {
+      const atualizacao = await atualizaDocumento(nomeDocumento, text);
 
-    if (atualizacao.modifiedCount) {
-      socket.to(nomeDocumento).emit("texto_editor_clientes", text);
-    }
-  });
+      if (atualizacao.modifiedCount) {
+        socket.to(nomeDocumento).emit("texto_editor_clientes", text);
+      }
+    });
 
-  socket.on("excluir_documento", async (name) => {
-    const resultado = await excluirDocumento(name);
+    socket.on("excluir_documento", async (name) => {
+      const resultado = await excluirDocumento(name);
 
-    if (resultado.deletedCount) {
-      io.emit("excluir_documento_sucesso", name);
-    }
+      if (resultado.deletedCount) {
+        io.emit("excluir_documento_sucesso", name);
+      }
+    });
+
+    socket.on("disconnect", () => {
+      let usersInDoc = removeConnection(
+        inputData.nomeDocumento,
+        inputData.userName
+      );
+
+      /* Send the updated list to all users in document, including who
+      is entering. */
+      io.to(inputData.nomeDocumento).emit("users_in_doc", usersInDoc);
+    });
   });
 }
 
