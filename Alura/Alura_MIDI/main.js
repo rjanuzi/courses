@@ -1,7 +1,30 @@
-function playPom() {
-  document.querySelector("#som_tecla_pom").play();
+function playAudio(audioKey) {
+  const element = document.querySelector(`#som_${audioKey}`);
+
+  if (element && element.localName === "audio") {
+    element.play();
+  }
 }
 
-const keysList = document.querySelectorAll(".tecla");
+document.querySelectorAll(".tecla").forEach((key) => {
+  let btnKeyClass = key.classList[1]; /* classes: "tecla tecla_pom" */
 
-keysList[0].onclick = playPom;
+  /* Add play audio function */
+  key.onclick = () => {
+    playAudio(btnKeyClass);
+  };
+
+  /* Pressed event */
+  key.onkeydown = (event) => {
+    if (event.code === "Enter" || event.code === "Space") {
+      key.classList.add("ativa");
+    }
+  };
+
+  /* Unpressed event */
+  key.onkeyup = (event) => {
+    if (event.code === "Enter" || event.code === "Space") {
+      key.classList.remove("ativa");
+    }
+  };
+});
