@@ -3,11 +3,15 @@
   --seconday-gray: #c0c0c0;
   --blue-button: #167bf7;
   --background-color: #00030c;
+  --font-principal: "Inter";
 }
 
 body {
   background-color: var(--background-color);
   color: var(--main-white);
+  font-family: var(--font-principal);
+  font-size: 16px;
+  font-weight: 400;
 }
 
 * {
@@ -23,4 +27,30 @@ body {
 
 .container {
   height: 100vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.container__btn {
+  background-color: var(--blue-button);
+  border-radius: 5px;
+  padding: 1em;
+  color: var(--main-white);
+  display: block;
+  text-decoration: none;
+}
+
+.btn_secondary {
+  background-color: transparent;
+  border: 2px solid var(--main-white);
+}
+
+.container__advertise {
+  font-size: 12px;
+  color: var(--seconday-gray);
+}
+
+.container__title {
+  font-size: 28px;
+  font-weight: 700;
 }
