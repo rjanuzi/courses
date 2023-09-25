@@ -23,6 +23,8 @@ body {
   background-image: url("img/Background.png");
   background-repeat: no-repeat;
   background-size: contain;
+  align-items: center;
+  text-align: center;
 }
 
 .container {
@@ -38,6 +40,7 @@ body {
   color: var(--main-white);
   display: block;
   text-decoration: none;
+  margin-bottom: 1em;
 }
 
 .btn_secondary {
@@ -53,4 +56,41 @@ body {
 .container__title {
   font-size: 28px;
   font-weight: 700;
+}
+
+.container__img {
+  margin: 1em 0 2em 0;
+}
+
+.container__box {
+  margin: 0 6em;
+}
+
+.secondary__img {
+  width: 80%;
+}
+
+.secondary {
+  align-items: center;
+  margin: 0 10em;
+}
+
+.description__title {
+  font-weight: 700;
+  font-size: 40px;
+  color: var(--main-white);
+  margin-bottom: 0.1em;
+}
+
+.description__text {
+  color: var(--seconday-gray);
+}
+
+.secondary__btn {
+  display: inline-block;
+  margin-top: 1em;
+}
+
+.container__description {
+  padding: 2em;
 }
